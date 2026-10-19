@@ -2,30 +2,36 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Door : MonoBehaviour, IReceiver
+public class Door : Receiver
 {
     public float doorOpenTime = 5f;
     
-    private bool _isDoorOpen = false;
+    public Coroutine openDoor;
 
-    public void Awake()
+    public override void Awake()
     {
-        StartCoroutine(OpenDoor());
+        base.Awake();
     }
 
-    public void ReceiveMessage(GameObject other)
+    private void Update()
     {
-        _isDoorOpen = true;
+        
+    }
+
+    public override void ReceiveMessage(GameObject other)
+    {
+        base.ReceiveMessage(other);
+        if (openDoor != null)
+        {
+            StopCoroutine(openDoor);
+        }
+        openDoor = StartCoroutine(OpenDoor());
     }
 
     private IEnumerator OpenDoor()
     {
-        while (_isDoorOpen)
-        {
-            Debug.Log("Door is open...");
-            yield return new WaitForSeconds(doorOpenTime);
-            Debug.Log("Door is closed!");
-            _isDoorOpen = false;
-        }
+        Debug.Log("Door is open...");
+        yield return new WaitForSeconds(doorOpenTime);
+        Debug.Log("Door is closed!");
     }
 }

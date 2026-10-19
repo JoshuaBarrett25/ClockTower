@@ -1,8 +1,13 @@
 using UnityEngine;
 
-public interface IReceiver
+public class Receiver : MonoBehaviour
 {
-    public void ReceiveMessage(GameObject other)
+    public virtual void Awake()
+    {
+        
+    }
+    
+    public virtual void ReceiveMessage(GameObject other)
     {
         Debug.Log("Received direction from..." + other.name);
     }

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class Button : Interactable
 {
-    public List<IReceiver> receivers;
+    public List<Receiver> receivers;
     
     protected override void ExecuteInteract(Player player)
     {

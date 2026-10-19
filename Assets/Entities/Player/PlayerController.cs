@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 _calculatedMoveVelocity;
     private LookDirection _lookDirection = LookDirection.Right;
     
+    //Self Respawn
+    private float selfRespawnCooldown = 4f;
+    private bool _isSelfRespawnOnCooldown = false;
     
     //Status
     public float verticalVelocity { get; private set; }
@@ -75,6 +78,14 @@ public class PlayerController : MonoBehaviour
         if (!_isGrounded)
         {
             Movement(InputManager.moveInput, player.playerData.airAcceleration, player.playerData.airDeceleration);
+        }
+    }
+
+    public void SelfRespawn(InputAction.CallbackContext context)
+    {
+        if (context.performed && !_isSelfRespawnOnCooldown)
+        {
+            player.Respawn();
         }
     }
 

@@ -19,4 +19,9 @@ public class Player : Entity
     {
         
     }
+
+    public void Respawn()
+    {
+        this.gameObject.transform.position = SpawnManager.instance.GetSpawnPoint().position;
+    }
 }

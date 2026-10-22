@@ -4,4 +4,6 @@ using UnityEngine;
 public class D_Interactable : ScriptableObject
 {
     public string interactableName;
+
+    public float interactCooldown = 0.5f;
 }

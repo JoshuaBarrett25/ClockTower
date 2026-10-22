@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -50,7 +51,10 @@ public class PlayerController : MonoBehaviour
     //Collision
     private bool _isGrounded;
     private bool _hitHead;
-    
+
+    //Actions Suspension
+    private Coroutine _suspensionCoroutine;
+    private bool _actionsSuspended;
     
 
     public void Awake()
@@ -58,6 +62,35 @@ public class PlayerController : MonoBehaviour
         player = GetComponent<Player>();
         _rigid2D = GetComponent<Rigidbody2D>();
         _lookDirection = LookDirection.Right;
+    }
+
+    public void ResetValues()
+    {
+        InputManager.isJumpPressed = false;
+        InputManager.isJumpReleased = false;
+
+        _lookDirection = LookDirection.Right;
+        _rigid2D.linearVelocity = Vector2.zero;
+        
+        verticalVelocity = 0f;
+        _isJumping = false;
+        _isFastFalling = false;
+        _isFalling = false;
+        _fastFallTime = 0;
+        _fastFallReleaseSpeed = 0f;
+        _numberOfJumpsUsed = 0;
+        
+        _timePastPoint = 0f;
+        _apexPoint = 0;
+        _isPastApexThreshold = false;
+        
+        _jumpBufferTimer = 0;
+        _jumpReleasedDuringBuffer = false;
+        
+        _coyoteTimer = 0f;
+        
+        _isGrounded = false;
+        _hitHead = false;
     }
 
     public void Update()
@@ -68,18 +101,45 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        CollisionChecks();
-        Jump();
-        if (_isGrounded)
+        if (!_actionsSuspended)
         {
-            Movement(InputManager.moveInput, player.playerData.groundAcceleration, player.playerData.groundDeceleration);   
-        }
+            CollisionChecks();
+            Jump();
+            if (_isGrounded)
+            {
+                Movement(InputManager.moveInput, player.playerData.groundAcceleration, player.playerData.groundDeceleration);
+            }
 
-        if (!_isGrounded)
-        {
-            Movement(InputManager.moveInput, player.playerData.airAcceleration, player.playerData.airDeceleration);
+            if (!_isGrounded)
+            {
+                Movement(InputManager.moveInput, player.playerData.airAcceleration, player.playerData.airDeceleration);
+            }
         }
     }
+
+    public void TempSuspendActions(float duration)
+    {
+        //Stop if already running otherwise flip-flops between states
+        if (_suspensionCoroutine != null)
+        {
+            StopCoroutine(_suspensionCoroutine);
+        }
+        _suspensionCoroutine = StartCoroutine(SuspendActions(duration));
+    }
+    
+
+    private IEnumerator SuspendActions(float duration)
+    {
+        _actionsSuspended = true;
+        ResetValues();
+        if (_actionsSuspended)
+        {
+            yield return new WaitForSeconds(duration);
+            _actionsSuspended = false;
+        }
+    }
+    
+    
 
     public void SelfRespawn(InputAction.CallbackContext context)
     {
@@ -95,14 +155,14 @@ public class PlayerController : MonoBehaviour
         {
             DirectionUpdate(moveInput);
             Vector2 targetVelocity = new Vector2(moveInput.x, 0) * player.playerData.maxSpeed;
-            _calculatedMoveVelocity = Vector2.Lerp(_calculatedMoveVelocity, targetVelocity, acceleration * Time.deltaTime);
+            _calculatedMoveVelocity = Vector2.Lerp(_calculatedMoveVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
             _rigid2D.linearVelocity = new Vector2(_calculatedMoveVelocity.x, _rigid2D.linearVelocity.y);
         }
 
-        else
+        else if (moveInput == Vector2.zero)
         {
-            _calculatedMoveVelocity = Vector2.Lerp(_calculatedMoveVelocity, Vector2.zero, deceleration * Time.deltaTime);
-            _rigid2D.linearVelocity = _calculatedMoveVelocity;
+            _calculatedMoveVelocity = Vector2.Lerp(_calculatedMoveVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+            _rigid2D.linearVelocity = new Vector2(_calculatedMoveVelocity.x, _rigid2D.linearVelocity.y);
         }
     }
 

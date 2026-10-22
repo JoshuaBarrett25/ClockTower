@@ -5,9 +5,7 @@ public class D_Player : D_Entity
 {
     [Header("Interact Stats")]
     public float interactDistance = 3.5f;
-    
-    
-    
+  
     [Header("Movement")]
     public float maxSpeed = 13f;
     public float groundAcceleration = 5f;
@@ -33,10 +31,13 @@ public class D_Player : D_Entity
     
     [Header("Coyote Time")]
     public float coyoteTime = 0.15f;
-    
+
     [Header("Dash")]
-    
+
     [Header("Collisions")]
+    public LayerMask hazardLayer;
+    public float deathDelay = 0.5f;
+    
     public LayerMask groundLayer;
     public float groundCheckDistance = 0.02f;
     public float headCheckDistance = 0.02f;

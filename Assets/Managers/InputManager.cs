@@ -9,7 +9,6 @@ public class InputManager : MonoBehaviour
     
     public static bool isJumpPressed;
     public static bool isJumpReleased;
-    
 
     public void Move(InputAction.CallbackContext context)
     {

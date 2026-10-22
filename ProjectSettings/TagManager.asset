@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
+  - KillBox
   layers:
   - Default
   - TransparentFX
@@ -14,7 +15,7 @@ TagManager:
   - UI
   - Ground
   - Interactable
-  - 
+  - Hazards
   - 
   - 
   - 
@@ -42,5 +43,30 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 4283443569
+    locked: 0
+  - name: RearDetails
+    uniqueID: 3722866811
+    locked: 0
+  - name: Ground
+    uniqueID: 3169411879
+    locked: 0
+  - name: Entity
+    uniqueID: 3204426069
+    locked: 0
+  - name: Walls
+    uniqueID: 4052524955
+    locked: 0
+  - name: Hazards
+    uniqueID: 1693573567
+    locked: 0
+  - name: Interactables
+    uniqueID: 2659148819
+    locked: 0
+  - name: FrontDetails
+    uniqueID: 1380407753
+    locked: 0
   m_RenderingLayers:
   - Default
+  m_MigratedRenderPipelines: []

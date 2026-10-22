@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a4b31050ca5a44daba8da5b1973b45, type: 3}
   m_Name: D_DefaultPlayer
   m_EditorClassIdentifier: Assembly-CSharp::D_Player
+  interactDistance: 3.5
   maxSpeed: 13
   groundAcceleration: 5
   groundDeceleration: 20
@@ -28,6 +29,10 @@ MonoBehaviour:
   apexHangTime: 0.075
   jumpBufferTime: 0.15
   coyoteTime: 0.15
+  hazardLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  deathDelay: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
